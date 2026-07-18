@@ -797,7 +797,7 @@ export default function App() {
                 The onboarding fields are pre-filled with our rehearsed Hackathon Demo Persona to allow an immediate rapid pitch. Feel free to modify them.
               </p>
 
-              <form onSubmit={(e) => { e.preventDefault(); submitOnboardingAndFetchQuestion(); }} className="space-y-6 mt-8 relative">
+              <form noValidate onSubmit={(e) => { e.preventDefault(); submitOnboardingAndFetchQuestion(); }} className="space-y-6 mt-8 relative">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
                     <label className="block text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider mb-2">Your Name</label>
