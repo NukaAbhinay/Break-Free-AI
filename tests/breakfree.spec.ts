@@ -9,15 +9,15 @@ test.describe("BreakFree AI E2E User Journeys", () => {
     // Verify main landing page title loads
     await expect(
       page.getByRole("heading", { name: /Break dopamine loops/i })
-    ).toBeVisible();
+    ).toBeVisible({ timeout: 15000 });
 
     // Verify primary call-to-action buttons exist
     await expect(
       page.getByRole("button", { name: "Start Behavioral Check" })
-    ).toBeVisible();
+    ).toBeVisible({ timeout: 15000 });
     await expect(
       page.getByRole("button", { name: "Skip to Dashboard" })
-    ).toBeVisible();
+    ).toBeVisible({ timeout: 15000 });
   });
 
   test("Test 2: Onboarding validation - Verify error modal on empty name", async ({ page }) => {

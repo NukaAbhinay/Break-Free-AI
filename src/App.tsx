@@ -761,7 +761,6 @@ export default function App() {
                 <button 
                   id="launch-onboarding-btn"
                   onClick={startOnboarding}
-                  aria-label="Start Behavioral Onboarding Check"
                   className="w-full sm:w-auto bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold px-10 py-4.5 rounded-2xl shadow-2xl shadow-indigo-500/20 hover:shadow-indigo-500/40 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2.5 text-sm uppercase tracking-wider focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   Start Behavioral Check
@@ -770,7 +769,6 @@ export default function App() {
                 <button
                   id="direct-seeded-btn"
                   onClick={loadOfflineSeededSession}
-                  aria-label="Skip to pre-populated demo dashboard"
                   className="w-full sm:w-auto text-slate-300 hover:text-white font-semibold px-8 py-4.5 rounded-2xl border border-slate-800 bg-slate-900/30 hover:bg-slate-900/80 transition-all text-sm backdrop-blur-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   Skip to Dashboard
