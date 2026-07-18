@@ -22,6 +22,17 @@ import {
   TranscriptTurnSchema,
   HistoryEntrySchema
 } from "./src/lib/aiSchemas";
+import {
+  DEFAULT_DEMO_ONBOARDING,
+  FALLBACK_PROFILE,
+  getFallbackInterviewQuestion,
+  getFallbackBehaviourProfile,
+  getFallbackSOSDecision,
+  getFallbackFutureSelf,
+  getFallbackTodayInsight,
+  getFallbackRecoveryPlan,
+  getFallbackAccountabilityMessage
+} from "./src/lib/demoData";
 
 dotenv.config();
 
@@ -145,14 +156,11 @@ app.post("/api/interview/next", async (req, res) => {
     const data = InterviewQuestionSchema.parse(rawData);
     res.json(data);
   } catch (error: any) {
-    console.error("Error generating next question:", error);
-    if (error instanceof ZodError) {
-      return res.status(502).json({
-        error: "Upstream AI model returned an invalid structured response.",
-        issues: error.issues
-      });
-    }
-    res.status(500).json({ error: error.message || "Failed to generate next question." });
+    console.error("Error generating next question (using fallback):", error);
+    res.setHeader("x-is-fallback", "true");
+    const currentIndex = typeof req.body?.currentIndex === 'number' ? req.body.currentIndex : 0;
+    const fallback = getFallbackInterviewQuestion(currentIndex);
+    return res.json({ ...fallback, isFallback: true });
   }
 });
 
@@ -248,14 +256,11 @@ app.post("/api/interview/profile", async (req, res) => {
     const data = BehaviourProfileSchema.parse(rawData);
     res.json(data);
   } catch (error: any) {
-    console.error("Error generating behaviour profile:", error);
-    if (error instanceof ZodError) {
-      return res.status(502).json({
-        error: "Upstream AI model returned an invalid structured response.",
-        issues: error.issues
-      });
-    }
-    res.status(500).json({ error: error.message || "Failed to generate behaviour profile." });
+    console.error("Error generating behaviour profile (using fallback):", error);
+    res.setHeader("x-is-fallback", "true");
+    const onboarding = req.body?.onboarding || DEFAULT_DEMO_ONBOARDING;
+    const fallback = getFallbackBehaviourProfile(onboarding);
+    return res.json({ ...fallback, isFallback: true });
   }
 });
 
@@ -398,14 +403,11 @@ app.post("/api/sos/decide", async (req, res) => {
     const data = SOSDecisionSchema.parse(rawData);
     res.json(data);
   } catch (error: any) {
-    console.error("Error in SOS decision engine:", error);
-    if (error instanceof ZodError) {
-      return res.status(502).json({
-        error: "Upstream AI model returned an invalid structured response.",
-        issues: error.issues
-      });
-    }
-    res.status(500).json({ error: error.message || "Failed to run decision engine." });
+    console.error("Error in SOS decision engine (using fallback):", error);
+    res.setHeader("x-is-fallback", "true");
+    const sosText = typeof req.body?.sosText === 'string' ? req.body.sosText : "feeling trigger";
+    const fallback = getFallbackSOSDecision(sosText);
+    return res.json({ ...fallback, isFallback: true });
   }
 });
 
@@ -473,14 +475,11 @@ app.post("/api/future-self", async (req, res) => {
     const data = FutureSelfSchema.parse(rawData);
     res.json(data);
   } catch (error: any) {
-    console.error("Error generating future self scripts:", error);
-    if (error instanceof ZodError) {
-      return res.status(502).json({
-        error: "Upstream AI model returned an invalid structured response.",
-        issues: error.issues
-      });
-    }
-    res.status(500).json({ error: error.message || "Failed to simulate future self." });
+    console.error("Error generating future self scripts (using fallback):", error);
+    res.setHeader("x-is-fallback", "true");
+    const onboarding = req.body?.onboarding || DEFAULT_DEMO_ONBOARDING;
+    const fallback = getFallbackFutureSelf(onboarding);
+    return res.json({ ...fallback, isFallback: true });
   }
 });
 
@@ -557,14 +556,11 @@ app.post("/api/today-insight", async (req, res) => {
     const data = TodayInsightSchema.parse(rawData);
     res.json(data);
   } catch (error: any) {
-    console.error("Error generating today's insight:", error);
-    if (error instanceof ZodError) {
-      return res.status(502).json({
-        error: "Upstream AI model returned an invalid structured response.",
-        issues: error.issues
-      });
-    }
-    res.status(500).json({ error: error.message || "Failed to generate daily insight." });
+    console.error("Error generating today's insight (using fallback):", error);
+    res.setHeader("x-is-fallback", "true");
+    const profile = req.body?.profile || FALLBACK_PROFILE;
+    const fallback = getFallbackTodayInsight(profile);
+    return res.json({ ...fallback, isFallback: true });
   }
 });
 
@@ -642,14 +638,11 @@ app.post("/api/recovery-plan", async (req, res) => {
     const data = RecoveryPlanSchema.parse(rawData);
     res.json(data);
   } catch (error: any) {
-    console.error("Error generating recovery plan:", error);
-    if (error instanceof ZodError) {
-      return res.status(502).json({
-        error: "Upstream AI model returned an invalid structured response.",
-        issues: error.issues
-      });
-    }
-    res.status(500).json({ error: error.message || "Failed to generate recovery plan." });
+    console.error("Error generating recovery plan (using fallback):", error);
+    res.setHeader("x-is-fallback", "true");
+    const profile = req.body?.profile || FALLBACK_PROFILE;
+    const fallback = getFallbackRecoveryPlan(profile);
+    return res.json({ ...fallback, isFallback: true });
   }
 });
 
@@ -708,14 +701,11 @@ app.post("/api/accountability/message", async (req, res) => {
     const data = AccountabilityMessageSchema.parse(rawData);
     res.json(data);
   } catch (error: any) {
-    console.error("Error generating accountability message:", error);
-    if (error instanceof ZodError) {
-      return res.status(502).json({
-        error: "Upstream AI model returned an invalid structured response.",
-        issues: error.issues
-      });
-    }
-    res.status(500).json({ error: error.message || "Failed to generate accountability message." });
+    console.error("Error generating accountability message (using fallback):", error);
+    res.setHeader("x-is-fallback", "true");
+    const onboarding = req.body?.onboarding || DEFAULT_DEMO_ONBOARDING;
+    const fallback = getFallbackAccountabilityMessage(onboarding);
+    return res.json({ ...fallback, isFallback: true });
   }
 });
 

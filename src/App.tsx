@@ -106,6 +106,7 @@ export default function App() {
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingMessage, setLoadingMessage] = useState<string>("");
   const [apiError, setApiError] = useState<string | null>(null);
+  const [isFallbackActive, setIsFallbackActive] = useState<boolean>(false);
   const [validationModal, setValidationModal] = useState<{ isOpen: boolean; title: string; message: string } | null>(null);
 
   // Auto-clear success highlights
@@ -229,6 +230,9 @@ export default function App() {
       });
       if (!response.ok) throw new Error(await response.text());
       const data = await response.json();
+      if (response.headers.get("x-is-fallback") === "true" || data.isFallback) {
+        setIsFallbackActive(true);
+      }
       setCurrentQuestion(data.question);
       setInterviewTranscript([]);
       setInterviewIndex(0);
@@ -269,6 +273,9 @@ export default function App() {
         });
         if (!response.ok) throw new Error(await response.text());
         const data = await response.json();
+        if (response.headers.get("x-is-fallback") === "true" || data.isFallback) {
+          setIsFallbackActive(true);
+        }
         setCurrentQuestion(data.question);
         setInterviewIndex(nextIndex);
       } catch (err) {
@@ -292,6 +299,9 @@ export default function App() {
       });
       if (!profileRes.ok) throw new Error(await profileRes.text());
       const profileData: BehaviourProfile = await profileRes.json();
+      if (profileRes.headers.get("x-is-fallback") === "true" || (profileData as any).isFallback) {
+        setIsFallbackActive(true);
+      }
       setProfile(profileData);
 
       // Pre-load Future Self Simulation (Call 4) & Today's Insight (Call 5) so the dashboard is instantly fully interactive
@@ -313,6 +323,7 @@ export default function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ profile: activeProfile, history })
       });
+      const isInsightFallback = insightRes.headers.get("x-is-fallback") === "true";
       const insightData: TodayInsightResponse = insightRes.ok 
         ? await insightRes.json()
         : {
@@ -320,6 +331,9 @@ export default function App() {
             adaptiveMove: "swapStrategy",
             adaptiveReason: "High bedside scrolling rates and code barriers suggest switching focus activities."
           };
+      if (isInsightFallback || (insightData as any).isFallback) {
+        setIsFallbackActive(true);
+      }
       setTodayInsight(insightData);
 
       // 2. Fetch Recovery Plan (Call 6)
@@ -328,6 +342,7 @@ export default function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ profile: activeProfile, adaptiveMove: insightData.adaptiveMove })
       });
+      const isPlanFallback = planRes.headers.get("x-is-fallback") === "true";
       const planData: RecoveryPlanResponse = planRes.ok
         ? await planRes.json()
         : {
@@ -337,6 +352,9 @@ export default function App() {
             encouragement: "Remember Alex, Sarah and your engineering goals depend on reclaiming focus.",
             tomorrowFocus: "Keep morning sessions completely digital-distraction free."
           };
+      if (isPlanFallback || (planData as any).isFallback) {
+        setIsFallbackActive(true);
+      }
       setRecoveryPlan(planData);
 
       // 3. Fetch Future Self scripts (Call 4)
@@ -345,12 +363,16 @@ export default function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ onboarding, profile: activeProfile })
       });
+      const isFsFallback = fsRes.headers.get("x-is-fallback") === "true";
       const fsData: FutureSelfSimulation = fsRes.ok
         ? await fsRes.json()
         : {
             relapse: `Hey ${onboarding.name}, it's your Future Self. It's been 30 days and we relapsed on Instagram. We failed to master distributed systems. Sarah and our team notice our low progress. We feel exhausted and unfocused. Put the phone down now.`,
             resist: `Hey ${onboarding.name}! We resisted and completed our system architecture modules. Our focus is razor sharp, Sarah promoted us, and we are leading database engineering. Your resilience today paid off.`
           };
+      if (isFsFallback || (fsData as any).isFallback) {
+        setIsFallbackActive(true);
+      }
       setFutureSelf(fsData);
 
       // 4. Fetch Accountability Partner Message
@@ -359,9 +381,13 @@ export default function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ onboarding, profile: activeProfile })
       });
+      const isAccFallback = accRes.headers.get("x-is-fallback") === "true";
       const accData = accRes.ok 
         ? await accRes.json()
         : { messageText: `Hey ${onboarding.accountabilityPartner || 'Sarah'}, I'm using BreakFree AI to hit my goals to master systems today. If I'm offline or distracted by Instagram, shoot me a check-in! Thank you!` };
+      if (isAccFallback || (accData as any).isFallback) {
+        setIsFallbackActive(true);
+      }
       setAccountabilityMsg(accData.messageText);
 
     } catch (err) {
@@ -437,6 +463,9 @@ export default function App() {
       });
       if (!response.ok) throw new Error(await response.text());
       const data: DecisionEngineResponse = await response.json();
+      if (response.headers.get("x-is-fallback") === "true" || (data as any).isFallback) {
+        setIsFallbackActive(true);
+      }
       setDecisionResult(data);
     } catch (err) {
       triggerError(err, "SOS Decision Engine API error.");
@@ -513,6 +542,7 @@ export default function App() {
     setDecisionResult(null);
     setFutureSelf(null);
     setApiError(null);
+    setIsFallbackActive(false);
   };
 
   return (
@@ -613,6 +643,31 @@ export default function App() {
                 onClick={() => setApiError(null)} 
                 aria-label="Dismiss error banner"
                 className="text-slate-400 hover:text-white p-1 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Offline Fallback Banner */}
+        {isFallbackActive && (
+          <div id="fallback-banner" role="status" className="mb-6 p-4 bg-indigo-950/40 border border-indigo-500/30 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-md">
+            <div className="flex items-start gap-3">
+              <Sparkles className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5 animate-pulse" />
+              <div>
+                <h4 className="font-bold text-indigo-200 text-sm">Offline Demo Experience Active</h4>
+                <p className="text-xs text-indigo-300 mt-1 max-w-2xl">
+                  AI is temporarily unavailable. Showing the intelligent offline demo experience.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+              <button 
+                id="close-fallback-btn"
+                onClick={() => setIsFallbackActive(false)} 
+                aria-label="Dismiss fallback banner"
+                className="text-slate-400 hover:text-white p-1.5 rounded-lg bg-slate-900 border border-slate-800 transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50"
               >
                 <X className="w-4 h-4" />
               </button>
