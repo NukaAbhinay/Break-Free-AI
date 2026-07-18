@@ -572,7 +572,8 @@ export default function App() {
             <button 
               id="reset-flow-btn"
               onClick={resetApp} 
-              className="text-slate-400 hover:text-white text-xs px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900/40 hover:bg-slate-900 transition-all flex items-center gap-1"
+              aria-label="Restart Demo Flow"
+              className="text-slate-400 hover:text-white text-xs px-3 py-1.5 rounded-lg border border-slate-800 bg-slate-900/40 hover:bg-slate-900 transition-all flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
             >
               <RefreshCw className="w-3 h-3" />
               Restart Demo
@@ -589,7 +590,7 @@ export default function App() {
 
         {/* Global Error Banner with Instant Bypass */}
         {apiError && (
-          <div id="error-banner" className="mb-6 p-4 bg-rose-950/60 border border-rose-900/50 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-md">
+          <div id="error-banner" role="alert" className="mb-6 p-4 bg-rose-950/60 border border-rose-900/50 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 backdrop-blur-md">
             <div className="flex items-start gap-3">
               <AlertTriangle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
               <div>
@@ -601,7 +602,8 @@ export default function App() {
               <button 
                 id="bypass-btn"
                 onClick={loadOfflineSeededSession} 
-                className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all shadow-lg shadow-indigo-600/10 flex items-center gap-1.5"
+                aria-label="Bypass connection error and use seeded fallback data"
+                className="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold px-4 py-2 rounded-xl transition-all shadow-lg shadow-indigo-600/10 flex items-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               >
                 <Sparkles className="w-3.5 h-3.5" />
                 Bypass & Use Seeded Fallback
@@ -609,7 +611,8 @@ export default function App() {
               <button 
                 id="close-error-btn"
                 onClick={() => setApiError(null)} 
-                className="text-slate-400 hover:text-white p-1 rounded-lg"
+                aria-label="Dismiss error banner"
+                className="text-slate-400 hover:text-white p-1 rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -658,6 +661,10 @@ export default function App() {
             >
               <motion.div 
                 id="validation-modal-content"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="validation-modal-title"
+                aria-describedby="validation-modal-message"
                 initial={{ scale: 0.95, y: 10 }}
                 animate={{ scale: 1, y: 0 }}
                 exit={{ scale: 0.95, y: 10 }}
@@ -682,7 +689,7 @@ export default function App() {
                   <button 
                     id="validation-modal-dismiss-btn"
                     onClick={() => setValidationModal(null)}
-                    className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-5 py-2.5 rounded-xl transition-all shadow-md shadow-indigo-600/10"
+                    className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-5 py-2.5 rounded-xl transition-all shadow-md shadow-indigo-600/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                   >
                     Got it, let me fix it
                   </button>
@@ -754,7 +761,8 @@ export default function App() {
                 <button 
                   id="launch-onboarding-btn"
                   onClick={startOnboarding}
-                  className="w-full sm:w-auto bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold px-10 py-4.5 rounded-2xl shadow-2xl shadow-indigo-500/20 hover:shadow-indigo-500/40 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2.5 text-sm uppercase tracking-wider"
+                  aria-label="Start Behavioral Onboarding Check"
+                  className="w-full sm:w-auto bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold px-10 py-4.5 rounded-2xl shadow-2xl shadow-indigo-500/20 hover:shadow-indigo-500/40 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2.5 text-sm uppercase tracking-wider focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   Start Behavioral Check
                   <ArrowRight className="w-4.5 h-4.5" />
@@ -762,7 +770,8 @@ export default function App() {
                 <button
                   id="direct-seeded-btn"
                   onClick={loadOfflineSeededSession}
-                  className="w-full sm:w-auto text-slate-300 hover:text-white font-semibold px-8 py-4.5 rounded-2xl border border-slate-800 bg-slate-900/30 hover:bg-slate-900/80 transition-all text-sm backdrop-blur-sm"
+                  aria-label="Skip to pre-populated demo dashboard"
+                  className="w-full sm:w-auto text-slate-300 hover:text-white font-semibold px-8 py-4.5 rounded-2xl border border-slate-800 bg-slate-900/30 hover:bg-slate-900/80 transition-all text-sm backdrop-blur-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   Skip to Dashboard
                 </button>
@@ -800,19 +809,22 @@ export default function App() {
               <form noValidate onSubmit={(e) => { e.preventDefault(); submitOnboardingAndFetchQuestion(); }} className="space-y-6 mt-8 relative">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider mb-2">Your Name</label>
+                    <label htmlFor="input-name" className="block text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider mb-2">Your Name</label>
                     <input 
                       type="text"
                       id="input-name"
                       value={onboarding.name}
                       onChange={(e) => setOnboarding({ ...onboarding, name: e.target.value })}
-                      className="w-full bg-slate-950/60 border border-slate-800 focus:border-cyan-500 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all placeholder-slate-600"
+                      className="w-full bg-slate-950/60 border border-slate-800 focus:border-cyan-500 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 transition-all placeholder-slate-600"
                       placeholder="e.g. Alex Mercer"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider mb-2">Age / Occupation</label>
+                    <div className="flex justify-between items-center mb-2">
+                      <label htmlFor="input-age" className="text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider">Age</label>
+                      <label htmlFor="input-occupation" className="text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider pr-16 sm:pr-20">Occupation</label>
+                    </div>
                     <div className="grid grid-cols-3 gap-2">
                       <div className="col-span-1">
                         <input 
@@ -831,7 +843,7 @@ export default function App() {
                               });
                             }
                           }}
-                          className={`w-full bg-slate-950/60 border rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all ${onboarding.age !== "" && (Number(onboarding.age) <= 0 || isNaN(Number(onboarding.age))) ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20' : 'border-slate-800 focus:border-cyan-500'}`}
+                          className={`w-full bg-slate-950/60 border rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 transition-all ${onboarding.age !== "" && (Number(onboarding.age) <= 0 || isNaN(Number(onboarding.age))) ? 'border-rose-500 focus:border-rose-500 focus:ring-rose-500/20' : 'border-slate-800 focus:border-cyan-500'}`}
                           placeholder="24"
                           required
                         />
@@ -841,7 +853,7 @@ export default function App() {
                         id="input-occupation"
                         value={onboarding.occupation}
                         onChange={(e) => setOnboarding({ ...onboarding, occupation: e.target.value })}
-                        className="col-span-2 bg-slate-950/60 border border-slate-800 focus:border-cyan-500 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all placeholder-slate-600"
+                        className="col-span-2 bg-slate-950/60 border border-slate-800 focus:border-cyan-500 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 transition-all placeholder-slate-600"
                         placeholder="e.g. Software Engineer"
                         required
                       />
@@ -856,7 +868,7 @@ export default function App() {
 
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <label className="block text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider">Select Target Habit to Break</label>
+                    <span className="block text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider">Select Target Habit to Break</span>
                     <span className="text-[10px] text-cyan-400 font-mono font-medium">At least one habit required</span>
                   </div>
                   
@@ -881,7 +893,9 @@ export default function App() {
                               setOnboarding({ ...onboarding, habits: [...onboarding.habits, habit] });
                             }
                           }}
-                          className={`px-3 py-3 rounded-xl text-xs font-semibold border transition-all text-center ${selected ? 'bg-cyan-500/15 border-cyan-500 text-cyan-300 shadow-lg shadow-cyan-500/5' : 'bg-slate-950/40 border-slate-800 text-slate-400 hover:bg-slate-900/60 hover:text-slate-200'}`}
+                          aria-label={`Habit: ${habit}`}
+                          aria-pressed={selected}
+                          className={`px-3 py-3 rounded-xl text-xs font-semibold border transition-all text-center focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 ${selected ? 'bg-cyan-500/15 border-cyan-500 text-cyan-300 shadow-lg shadow-cyan-500/5' : 'bg-slate-950/40 border-slate-800 text-slate-400 hover:bg-slate-900/60 hover:text-slate-200'}`}
                         >
                           {habit}
                         </button>
@@ -892,23 +906,23 @@ export default function App() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider mb-2">Short-Term Goal</label>
+                    <label htmlFor="input-short-goal" className="block text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider mb-2">Short-Term Goal</label>
                     <textarea 
                       id="input-short-goal"
                       value={onboarding.shortTermGoal}
                       onChange={(e) => setOnboarding({ ...onboarding, shortTermGoal: e.target.value })}
-                      className="w-full bg-slate-950/60 border border-slate-800 focus:border-cyan-500 rounded-xl p-3 text-xs text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all h-20 resize-none placeholder-slate-600"
+                      className="w-full bg-slate-950/60 border border-slate-800 focus:border-cyan-500 rounded-xl p-3 text-xs text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 transition-all h-20 resize-none placeholder-slate-600"
                       placeholder="e.g. Master distributed systems, reclaim focus blocks"
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider mb-2">Long-Term Vision</label>
+                    <label htmlFor="input-long-goal" className="block text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider mb-2">Long-Term Vision</label>
                     <textarea 
                       id="input-long-goal"
                       value={onboarding.longTermGoal}
                       onChange={(e) => setOnboarding({ ...onboarding, longTermGoal: e.target.value })}
-                      className="w-full bg-slate-950/60 border border-slate-800 focus:border-cyan-500 rounded-xl p-3 text-xs text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all h-20 resize-none placeholder-slate-600"
+                      className="w-full bg-slate-950/60 border border-slate-800 focus:border-cyan-500 rounded-xl p-3 text-xs text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 transition-all h-20 resize-none placeholder-slate-600"
                       placeholder="e.g. Become a Lead Systems Architect"
                       required
                     />
@@ -917,24 +931,24 @@ export default function App() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider mb-2">Why does this goal matter?</label>
+                    <label htmlFor="input-why" className="block text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider mb-2">Why does this goal matter?</label>
                     <textarea 
                       id="input-why"
                       value={onboarding.whyGoalMatters}
                       onChange={(e) => setOnboarding({ ...onboarding, whyGoalMatters: e.target.value })}
-                      className="w-full bg-slate-950/60 border border-slate-800 focus:border-cyan-500 rounded-xl p-3 text-xs text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all h-20 resize-none placeholder-slate-600"
+                      className="w-full bg-slate-950/60 border border-slate-800 focus:border-cyan-500 rounded-xl p-3 text-xs text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 transition-all h-20 resize-none placeholder-slate-600"
                       placeholder="Deep internal drive..."
                       required
                     />
                   </div>
                   <div>
-                    <label className="block text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider mb-2">Accountability Partner (Optional)</label>
+                    <label htmlFor="input-partner" className="block text-[11px] font-bold text-slate-300 font-mono uppercase tracking-wider mb-2">Accountability Partner (Optional)</label>
                     <input 
                       type="text"
                       id="input-partner"
                       value={onboarding.accountabilityPartner}
                       onChange={(e) => setOnboarding({ ...onboarding, accountabilityPartner: e.target.value })}
-                      className="w-full bg-slate-950/60 border border-slate-800 focus:border-cyan-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all placeholder-slate-600"
+                      className="w-full bg-slate-950/60 border border-slate-800 focus:border-cyan-500 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 transition-all placeholder-slate-600"
                       placeholder="Sarah (Engineering Manager)"
                     />
                     <p className="text-[10px] text-slate-400 mt-2 italic leading-relaxed">
@@ -947,7 +961,7 @@ export default function App() {
                   <button 
                     type="submit"
                     id="submit-onboarding-btn"
-                    className="bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold px-7 py-3.5 rounded-xl transition-all flex items-center gap-2 text-sm shadow-xl shadow-cyan-500/10 uppercase tracking-wider"
+                    className="bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold px-7 py-3.5 rounded-xl transition-all flex items-center gap-2 text-sm shadow-xl shadow-cyan-500/10 uppercase tracking-wider focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                   >
                     Start AI Diagnostic Interview
                     <ArrowRight className="w-4 h-4" />
@@ -1017,7 +1031,7 @@ export default function App() {
               </div>
 
               {/* Active prompt question from Gemini */}
-              <div className="bg-gradient-to-r from-cyan-950/20 to-indigo-950/20 border border-cyan-500/15 rounded-2xl p-5 mb-6 relative overflow-hidden shadow-lg shadow-cyan-500/5">
+              <div aria-live="polite" className="bg-gradient-to-r from-cyan-950/20 to-indigo-950/20 border border-cyan-500/15 rounded-2xl p-5 mb-6 relative overflow-hidden shadow-lg shadow-cyan-500/5">
                 <div className="absolute top-0 right-0 w-16 h-16 bg-cyan-500/5 rounded-full blur-xl"></div>
                 <h4 className="text-[10px] font-mono uppercase tracking-wider text-cyan-400 font-bold mb-2">ACTIVE COACHING QUESTION:</h4>
                 <p id="active-question-text" className="text-sm sm:text-base font-semibold text-white leading-relaxed">
@@ -1027,11 +1041,12 @@ export default function App() {
 
               {/* Input for user's answer */}
               <div className="space-y-4">
+                <label htmlFor="interview-answer-input" className="sr-only">Type your response to the active coaching question</label>
                 <textarea
                   id="interview-answer-input"
                   value={userAnswer}
                   onChange={(e) => setUserAnswer(e.target.value)}
-                  className="w-full bg-slate-950/60 border border-slate-800 focus:border-cyan-500 rounded-xl p-4 text-xs text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 transition-all h-24 resize-none placeholder-slate-600"
+                  className="w-full bg-slate-950/60 border border-slate-800 focus:border-cyan-500 rounded-xl p-4 text-xs text-white focus:outline-none focus:ring-1 focus:ring-cyan-500 focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 transition-all h-24 resize-none placeholder-slate-600"
                   placeholder="Type your deep answer... (Be honest - e.g. 'I scroll bedtime reels because my brain is too tired to read')"
                   onKeyDown={(e) => {
                     if (e.key === "Enter" && !e.shiftKey) {
@@ -1046,7 +1061,8 @@ export default function App() {
                   <button
                     id="submit-turn-btn"
                     onClick={submitInterviewTurn}
-                    className="bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold px-6 py-3 rounded-xl transition-all text-xs flex items-center gap-1.5 shadow-xl shadow-cyan-500/10 uppercase tracking-wider"
+                    aria-label="Submit Answer"
+                    className="bg-gradient-to-r from-cyan-500 to-indigo-600 hover:from-cyan-400 hover:to-indigo-500 text-white font-bold px-6 py-3 rounded-xl transition-all text-xs flex items-center gap-1.5 shadow-xl shadow-cyan-500/10 uppercase tracking-wider focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                   >
                     Submit Answer
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -1135,7 +1151,8 @@ export default function App() {
                 <button
                   id="go-dashboard-btn"
                   onClick={() => setPhase("dashboard")}
-                  className="bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold px-8 py-4 rounded-2xl transition-all shadow-2xl shadow-indigo-500/10 flex items-center gap-2 text-sm uppercase tracking-wider"
+                  aria-label="Generate Daily Recovery Dashboard"
+                  className="bg-gradient-to-r from-cyan-500 via-indigo-600 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-white font-bold px-8 py-4 rounded-2xl transition-all shadow-2xl shadow-indigo-500/10 flex items-center gap-2 text-sm uppercase tracking-wider focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                 >
                   Generate Daily Recovery Dashboard
                   <ArrowRight className="w-4 h-4" />
@@ -1183,7 +1200,8 @@ export default function App() {
                   <button
                     id="trigger-sos-overlay-btn"
                     onClick={() => { setSosActive(true); setSosText(""); setDecisionResult(null); }}
-                    className="flex-1 md:flex-none bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-400 hover:to-red-550 text-white font-extrabold px-8 py-4 rounded-2xl shadow-2xl shadow-rose-600/20 hover:shadow-rose-500/40 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2.5 text-xs uppercase tracking-widest animate-pulse"
+                    aria-label="Trigger Urgent AI Support Overrides"
+                    className="flex-1 md:flex-none bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-400 hover:to-red-550 text-white font-extrabold px-8 py-4 rounded-2xl shadow-2xl shadow-rose-600/20 hover:shadow-rose-500/40 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2.5 text-xs uppercase tracking-widest animate-pulse focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-550 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                   >
                     <Zap className="w-5 h-5 fill-white text-white" />
                     I Have an Urge Right Now
@@ -1284,7 +1302,8 @@ export default function App() {
                       </div>
                       <button
                         onClick={() => setPhase("profile")}
-                        className="text-xs text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1 shrink-0 uppercase tracking-wider font-mono"
+                        aria-label="Expand Behavioral Diagnostic Results Card"
+                        className="text-xs text-cyan-400 hover:text-cyan-300 font-bold flex items-center gap-1 shrink-0 uppercase tracking-wider font-mono focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950 rounded-lg px-2 py-1"
                       >
                         Expand Card <ArrowRight className="w-3.5 h-3.5" />
                       </button>
@@ -1333,14 +1352,16 @@ export default function App() {
                           {playingAudio === "relapse" ? (
                             <button 
                               onClick={stopSpeech}
-                              className="bg-rose-600 hover:bg-rose-500 text-white p-3 rounded-full transition-all shrink-0 shadow-lg shadow-rose-600/20"
+                              aria-label="Stop playing Relapse trajectory speech"
+                              className="bg-rose-600 hover:bg-rose-500 text-white p-3 rounded-full transition-all shrink-0 shadow-lg shadow-rose-600/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                             >
                               <Square className="w-3.5 h-3.5 fill-white" />
                             </button>
                           ) : (
                             <button 
                               onClick={() => playSpeech("relapse")}
-                              className="bg-slate-900 hover:bg-slate-800 text-slate-300 p-3 rounded-full transition-all hover:text-white shrink-0"
+                              aria-label="Play Relapse trajectory speech"
+                              className="bg-slate-900 hover:bg-slate-800 text-slate-300 p-3 rounded-full transition-all hover:text-white shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                             >
                               <Play className="w-3.5 h-3.5 fill-slate-300 text-slate-300" />
                             </button>
@@ -1356,14 +1377,16 @@ export default function App() {
                           {playingAudio === "resist" ? (
                             <button 
                               onClick={stopSpeech}
-                              className="bg-emerald-600 hover:bg-emerald-500 text-white p-3 rounded-full transition-all shrink-0 shadow-lg shadow-emerald-600/20"
+                              aria-label="Stop playing Resist trajectory speech"
+                              className="bg-emerald-600 hover:bg-emerald-500 text-white p-3 rounded-full transition-all shrink-0 shadow-lg shadow-emerald-600/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                             >
                               <Square className="w-3.5 h-3.5 fill-white" />
                             </button>
                           ) : (
                             <button 
                               onClick={() => playSpeech("resist")}
-                              className="bg-slate-900 hover:bg-slate-800 text-slate-300 p-3 rounded-full transition-all hover:text-white shrink-0"
+                              aria-label="Play Resist trajectory speech"
+                              className="bg-slate-900 hover:bg-slate-800 text-slate-300 p-3 rounded-full transition-all hover:text-white shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                             >
                               <Play className="w-3.5 h-3.5 fill-slate-300 text-slate-300" />
                             </button>
@@ -1424,8 +1447,9 @@ export default function App() {
                               navigator.clipboard.writeText(accountabilityMsg);
                               setCopiedMsg(true);
                             }}
-                            className="absolute top-3.5 right-3.5 text-slate-500 hover:text-slate-300 p-2 rounded-lg bg-slate-900 border border-slate-800 transition-all cursor-pointer"
+                            className="absolute top-3.5 right-3.5 text-slate-500 hover:text-slate-300 p-2 rounded-lg bg-slate-900 border border-slate-800 transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                             title="Copy message to clipboard"
+                            aria-label="Copy prompt-generated alert text message to clipboard"
                           >
                             {copiedMsg ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                           </button>
@@ -1444,7 +1468,8 @@ export default function App() {
                       <button
                         id="open-log-dialog-btn"
                         onClick={() => setCustomLogActive(true)}
-                        className="text-[10px] bg-cyan-500/10 hover:bg-cyan-500/25 border border-cyan-500/20 text-cyan-300 font-bold px-3 py-1.5 rounded-full flex items-center gap-1 transition-all cursor-pointer"
+                        aria-label="Log an urge event manually"
+                        className="text-[10px] bg-cyan-500/10 hover:bg-cyan-500/25 border border-cyan-500/20 text-cyan-300 font-bold px-3 py-1.5 rounded-full flex items-center gap-1 transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
                       >
                         <Plus className="w-3.5 h-3.5" /> Log Urge
                       </button>
@@ -1489,6 +1514,9 @@ export default function App() {
                     className="fixed inset-0 bg-slate-950/90 z-50 flex items-center justify-center p-4 backdrop-blur-md overflow-y-auto"
                   >
                     <motion.div 
+                      role="dialog"
+                      aria-modal="true"
+                      aria-labelledby="sos-overlay-title"
                       initial={{ scale: 0.95, y: 15 }}
                       animate={{ scale: 1, y: 0 }}
                       exit={{ scale: 0.95, y: 15 }}
@@ -1498,7 +1526,8 @@ export default function App() {
                       <button
                         id="close-sos-overlay-btn"
                         onClick={() => { setSosActive(false); setSosText(""); setDecisionResult(null); }}
-                        className="absolute top-5 right-5 text-slate-400 hover:text-white p-1.5 bg-slate-950 border border-slate-800 rounded-lg transition-all"
+                        aria-label="Close Urge Intercept System"
+                        className="absolute top-5 right-5 text-slate-400 hover:text-white p-1.5 bg-slate-950 border border-slate-800 rounded-lg transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -1517,11 +1546,12 @@ export default function App() {
 
                       {/* Urge text field */}
                       <div className="mt-5 space-y-4">
+                        <label htmlFor="sos-input-text" className="sr-only">Type your current craving trigger</label>
                         <textarea
                           id="sos-input-text"
                           value={sosText}
                           onChange={(e) => setSosText(e.target.value)}
-                          className="w-full bg-slate-950 border border-slate-800 focus:border-rose-500 rounded-xl p-4 text-xs text-white focus:outline-none focus:ring-1 focus:ring-rose-500 transition-all h-24 resize-none"
+                          className="w-full bg-slate-950 border border-slate-800 focus:border-rose-500 rounded-xl p-4 text-xs text-white focus:outline-none focus:ring-1 focus:ring-rose-500 focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 transition-all h-24 resize-none"
                           placeholder="Type your current craving trigger... (unscripted, arbitrary text accepted)"
                           required
                         />
@@ -1532,21 +1562,21 @@ export default function App() {
                           <button
                             type="button"
                             onClick={() => setSosText("I'm debugging this distributed lock manager and it has been 2 hours. I want to check Instagram Reels to clear my head.")}
-                            className="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 px-2.5 py-1 rounded-full transition-all"
+                            className="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 px-2.5 py-1 rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/50"
                           >
                             Code Blocker Urge
                           </button>
                           <button
                             type="button"
                             onClick={() => setSosText("I have severe sleep anxiety tonight and I feel like looking at Reels till I fall asleep.")}
-                            className="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 px-2.5 py-1 rounded-full transition-all"
+                            className="text-[10px] bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 px-2.5 py-1 rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500/50"
                           >
                             Bedtime Doomscroll Urge
                           </button>
                           <button
                             type="button"
                             onClick={() => setSosText("I am having severe self-harm urges right now.")}
-                            className="text-[10px] bg-rose-950/20 border border-rose-900/30 text-rose-300 px-2.5 py-1 rounded-full transition-all"
+                            className="text-[10px] bg-rose-950/20 border border-rose-900/30 text-rose-300 px-2.5 py-1 rounded-full transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
                           >
                             Crisis Escalation Trigger
                           </button>
@@ -1556,7 +1586,7 @@ export default function App() {
                           <button
                             id="execute-decision-engine-btn"
                             onClick={triggerSOSDecision}
-                            className="bg-rose-600 hover:bg-rose-500 text-white font-bold px-6 py-3 rounded-xl transition-all text-xs flex items-center gap-1.5 shadow-md shadow-rose-600/10"
+                            className="bg-rose-600 hover:bg-rose-500 text-white font-bold px-6 py-3 rounded-xl transition-all text-xs flex items-center gap-1.5 shadow-md shadow-rose-600/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                           >
                             Execute Decision Engine
                             <ArrowRight className="w-4 h-4" />
@@ -1644,7 +1674,8 @@ export default function App() {
                                         setCopiedMsg(true);
                                         alert("Accountability Partner text message copied to clipboard! Send it to your manager/friend immediately.");
                                       }}
-                                      className="text-[10px] bg-rose-600 hover:bg-rose-500 text-white font-bold px-3 py-1 rounded-lg transition-all flex items-center gap-1"
+                                      aria-label="Copy accountability SMS text message"
+                                      className="text-[10px] bg-rose-600 hover:bg-rose-500 text-white font-bold px-3 py-1 rounded-lg transition-all flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                                     >
                                       {copiedMsg ? "Copied!" : "Copy SMS to Sarah"}
                                     </button>
@@ -1672,7 +1703,8 @@ export default function App() {
                                 setDecisionResult(null);
                                 recalculateDailyInsights();
                               }}
-                              className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-2.5 rounded-xl text-xs transition-all"
+                              aria-label="Log success of this action and return to dashboard"
+                              className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-5 py-2.5 rounded-xl text-xs transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                             >
                               Log Success & Return
                             </button>
@@ -1696,6 +1728,9 @@ export default function App() {
                     className="fixed inset-0 bg-slate-950/85 z-50 flex items-center justify-center p-4 backdrop-blur-md"
                   >
                     <motion.div 
+                      role="dialog"
+                      aria-modal="true"
+                      aria-labelledby="custom-log-title"
                       initial={{ scale: 0.95 }}
                       animate={{ scale: 1 }}
                       exit={{ scale: 0.95 }}
@@ -1704,55 +1739,60 @@ export default function App() {
                       <button
                         id="close-log-overlay-btn"
                         onClick={() => setCustomLogActive(false)}
-                        className="absolute top-5 right-5 text-slate-400 hover:text-white p-1.5 rounded-lg bg-slate-950 border border-slate-800"
+                        aria-label="Close Log Current State Modal"
+                        className="absolute top-5 right-5 text-slate-400 hover:text-white p-1.5 rounded-lg bg-slate-950 border border-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                       >
                         <X className="w-4 h-4" />
                       </button>
 
-                      <h3 className="text-xl font-display font-bold text-white mb-2">Log Current State</h3>
+                      <h3 id="custom-log-title" className="text-xl font-display font-bold text-white mb-2">Log Current State</h3>
                       <p className="text-slate-400 text-xs mb-4">
                         Manually record an urge event to test how the coaching engine adapts.
                       </p>
 
                       <div className="space-y-4">
                         <div>
-                          <label className="block text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1.5">What triggered the urge?</label>
+                          <label htmlFor="custom-log-trigger" className="block text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1.5">What triggered the urge?</label>
                           <input 
                             type="text"
                             id="custom-log-trigger"
                             value={customTrigger}
                             onChange={(e) => setCustomTrigger(e.target.value)}
-                            className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                             placeholder="e.g. Brain tired after standup"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1.5">Action Chosen</label>
+                          <label htmlFor="custom-log-action" className="block text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1.5">Action Chosen</label>
                           <input 
                             type="text"
                             id="custom-log-action"
                             value={customAction}
                             onChange={(e) => setCustomAction(e.target.value)}
-                            className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            className="w-full bg-slate-950 border border-slate-800 focus:border-indigo-500 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                             placeholder="e.g. Scrolled bedtime reels / did stretching"
                           />
                         </div>
 
                         <div>
-                          <label className="block text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1.5">Outcome</label>
+                          <span className="block text-[10px] font-mono text-slate-400 uppercase tracking-widest mb-1.5">Outcome</span>
                           <div className="grid grid-cols-2 gap-2 mt-1">
                             <button
                               type="button"
                               onClick={() => setCustomOutcome("success")}
-                              className={`py-2 rounded-xl text-xs font-semibold border transition-all ${customOutcome === "success" ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
+                              aria-label="Manually log Resisted (Success)"
+                              aria-pressed={customOutcome === "success"}
+                              className={`py-2 rounded-xl text-xs font-semibold border transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 ${customOutcome === "success" ? 'bg-emerald-500/10 border-emerald-500 text-emerald-400' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
                             >
                               Resisted (Success)
                             </button>
                             <button
                               type="button"
                               onClick={() => setCustomOutcome("relapsed")}
-                              className={`py-2 rounded-xl text-xs font-semibold border transition-all ${customOutcome === "relapsed" ? 'bg-rose-500/10 border-rose-500 text-rose-400' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
+                              aria-label="Manually log Gave In (Relapsed)"
+                              aria-pressed={customOutcome === "relapsed"}
+                              className={`py-2 rounded-xl text-xs font-semibold border transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 ${customOutcome === "relapsed" ? 'bg-rose-500/10 border-rose-500 text-rose-400' : 'bg-slate-950 border-slate-800 text-slate-500'}`}
                             >
                               Gave In (Relapsed)
                             </button>
@@ -1763,7 +1803,8 @@ export default function App() {
                           <button
                             id="submit-log-btn"
                             onClick={logCustomUrge}
-                            className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-4 py-2 rounded-xl text-xs transition-all shadow-md shadow-indigo-600/10"
+                            aria-label="Save manually logged urge entry"
+                            className="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold px-4 py-2 rounded-xl text-xs transition-all shadow-md shadow-indigo-600/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
                           >
                             Save Log Entry
                           </button>

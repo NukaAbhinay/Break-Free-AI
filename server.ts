@@ -8,7 +8,7 @@ import path from "path";
 import dotenv from "dotenv";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
-import { ZodError } from "zod";
+import { z, ZodError } from "zod";
 import { detectCrisis } from "./src/lib/safety";
 import {
   InterviewQuestionSchema,
@@ -17,7 +17,10 @@ import {
   FutureSelfSchema,
   TodayInsightSchema,
   RecoveryPlanSchema,
-  AccountabilityMessageSchema
+  AccountabilityMessageSchema,
+  OnboardingInputSchema,
+  TranscriptTurnSchema,
+  HistoryEntrySchema
 } from "./src/lib/aiSchemas";
 
 dotenv.config();
@@ -65,11 +68,19 @@ app.get("/api/health", (req, res) => {
  */
 app.post("/api/interview/next", async (req, res) => {
   try {
-    const { onboarding, transcript, currentIndex } = req.body;
+    const validationResult = z.object({
+      onboarding: OnboardingInputSchema,
+      transcript: z.array(TranscriptTurnSchema).optional().default([]),
+      currentIndex: z.number().nonnegative()
+    }).safeParse(req.body);
 
-    if (!onboarding) {
-      return res.status(400).json({ error: "Onboarding data is required" });
+    if (!validationResult.success) {
+      return res.status(400).json({
+        error: "Invalid request payload.",
+        details: validationResult.error.issues
+      });
     }
+    const { onboarding, transcript, currentIndex } = validationResult.data;
 
     const ai = getAI();
 
@@ -151,11 +162,18 @@ app.post("/api/interview/next", async (req, res) => {
  */
 app.post("/api/interview/profile", async (req, res) => {
   try {
-    const { onboarding, transcript } = req.body;
+    const validationResult = z.object({
+      onboarding: OnboardingInputSchema,
+      transcript: z.array(TranscriptTurnSchema)
+    }).safeParse(req.body);
 
-    if (!onboarding || !transcript) {
-      return res.status(400).json({ error: "Onboarding and interview transcript are required" });
+    if (!validationResult.success) {
+      return res.status(400).json({
+        error: "Invalid request payload.",
+        details: validationResult.error.issues
+      });
     }
+    const { onboarding, transcript } = validationResult.data;
 
     const ai = getAI();
 
@@ -248,11 +266,19 @@ app.post("/api/interview/profile", async (req, res) => {
  */
 app.post("/api/sos/decide", async (req, res) => {
   try {
-    const { sosText, profile, history } = req.body;
+    const validationResult = z.object({
+      sosText: z.string().min(1, "SOS text is required"),
+      profile: BehaviourProfileSchema,
+      history: z.array(HistoryEntrySchema).optional().default([])
+    }).safeParse(req.body);
 
-    if (!sosText || !profile) {
-      return res.status(400).json({ error: "SOS text and Behaviour Profile are required" });
+    if (!validationResult.success) {
+      return res.status(400).json({
+        error: "Invalid request payload.",
+        details: validationResult.error.issues
+      });
     }
+    const { sosText, profile, history } = validationResult.data;
 
     // Safety pre-flight crisis intercept
     if (detectCrisis(sosText)) {
@@ -389,11 +415,18 @@ app.post("/api/sos/decide", async (req, res) => {
  */
 app.post("/api/future-self", async (req, res) => {
   try {
-    const { onboarding, profile } = req.body;
+    const validationResult = z.object({
+      onboarding: OnboardingInputSchema.optional(),
+      profile: BehaviourProfileSchema
+    }).safeParse(req.body);
 
-    if (!profile) {
-      return res.status(400).json({ error: "Behaviour Profile is required" });
+    if (!validationResult.success) {
+      return res.status(400).json({
+        error: "Invalid request payload.",
+        details: validationResult.error.issues
+      });
     }
+    const { onboarding, profile } = validationResult.data;
 
     const ai = getAI();
 
@@ -457,11 +490,18 @@ app.post("/api/future-self", async (req, res) => {
  */
 app.post("/api/today-insight", async (req, res) => {
   try {
-    const { profile, history } = req.body;
+    const validationResult = z.object({
+      profile: BehaviourProfileSchema,
+      history: z.array(HistoryEntrySchema)
+    }).safeParse(req.body);
 
-    if (!profile || !history) {
-      return res.status(400).json({ error: "Behaviour Profile and history are required" });
+    if (!validationResult.success) {
+      return res.status(400).json({
+        error: "Invalid request payload.",
+        details: validationResult.error.issues
+      });
     }
+    const { profile, history } = validationResult.data;
 
     const ai = getAI();
 
@@ -534,11 +574,18 @@ app.post("/api/today-insight", async (req, res) => {
  */
 app.post("/api/recovery-plan", async (req, res) => {
   try {
-    const { profile, adaptiveMove } = req.body;
+    const validationResult = z.object({
+      profile: BehaviourProfileSchema,
+      adaptiveMove: z.enum(["keepPlan", "increaseDifficulty", "swapStrategy"])
+    }).safeParse(req.body);
 
-    if (!profile || !adaptiveMove) {
-      return res.status(400).json({ error: "Profile and adaptiveMove are required" });
+    if (!validationResult.success) {
+      return res.status(400).json({
+        error: "Invalid request payload.",
+        details: validationResult.error.issues
+      });
     }
+    const { profile, adaptiveMove } = validationResult.data;
 
     const ai = getAI();
 
@@ -612,11 +659,18 @@ app.post("/api/recovery-plan", async (req, res) => {
  */
 app.post("/api/accountability/message", async (req, res) => {
   try {
-    const { onboarding, profile } = req.body;
+    const validationResult = z.object({
+      onboarding: OnboardingInputSchema,
+      profile: BehaviourProfileSchema.nullable().optional()
+    }).safeParse(req.body);
 
-    if (!onboarding) {
-      return res.status(400).json({ error: "Onboarding data is required" });
+    if (!validationResult.success) {
+      return res.status(400).json({
+        error: "Invalid request payload.",
+        details: validationResult.error.issues
+      });
     }
+    const { onboarding, profile } = validationResult.data;
 
     const ai = getAI();
 
