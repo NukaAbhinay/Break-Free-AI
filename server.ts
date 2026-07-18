@@ -8,6 +8,7 @@ import path from "path";
 import dotenv from "dotenv";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
+import { detectCrisis } from "./src/lib/safety";
 
 dotenv.config();
 
@@ -227,6 +228,41 @@ app.post("/api/sos/decide", async (req, res) => {
 
     if (!sosText || !profile) {
       return res.status(400).json({ error: "SOS text and Behaviour Profile are required" });
+    }
+
+    // Safety pre-flight crisis intercept
+    if (detectCrisis(sosText)) {
+      return res.json({
+        options: [
+          {
+            title: "988 Suicide & Crisis Lifeline",
+            reason: "Immediate professional support is available 24/7. This is the optimal response to ensure your safety.",
+            effortLevel: "Low",
+            score: 100
+          },
+          {
+            title: "Crisis Text Line (SMS HOME to 741741)",
+            reason: "Connect with a volunteer crisis counselor via text for confidential support.",
+            effortLevel: "Low",
+            score: 100
+          },
+          {
+            title: "Notify Accountability Partner",
+            reason: "Contact your trusted partner directly or request a face-to-face check-in.",
+            effortLevel: "Low",
+            score: 100
+          }
+        ],
+        chosenOption: {
+          title: "988 Suicide & Crisis Lifeline",
+          reason: "Please call or text 988. Professional care and support is available 24/7. You do not have to carry this alone."
+        },
+        reasoning: "A security safety check matched high-risk keywords in your SOS entry. Bypassing the AI model to guarantee immediate crisis care and hotline information.",
+        escalation: {
+          shouldEscalate: true,
+          escalationReason: "Pre-flight safety logic flagged crisis/self-harm risk phrases."
+        }
+      });
     }
 
     const ai = getAI();

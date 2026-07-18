@@ -47,6 +47,8 @@ import {
   FALLBACK_PROFILE 
 } from "./lib/demoData";
 
+import { detectCrisis } from "./lib/safety";
+
 export default function App() {
   // Navigation Phases: "landing" | "onboarding" | "interview" | "profile" | "dashboard"
   const [phase, setPhase] = useState<"landing" | "onboarding" | "interview" | "profile" | "dashboard">("landing");
@@ -387,6 +389,42 @@ export default function App() {
       alert("Please type out what you are experiencing so Gemini can analyze it.");
       return;
     }
+
+    if (detectCrisis(sosText)) {
+      setDecisionResult({
+        options: [
+          {
+            title: "988 Suicide & Crisis Lifeline",
+            reason: "Immediate professional support is available 24/7. This is the optimal response to ensure your safety.",
+            effortLevel: "Low",
+            score: 100
+          },
+          {
+            title: "Crisis Text Line (SMS HOME to 741741)",
+            reason: "Connect with a volunteer crisis counselor via text for confidential support.",
+            effortLevel: "Low",
+            score: 100
+          },
+          {
+            title: "Notify Accountability Partner",
+            reason: "Contact your trusted partner directly or request a face-to-face check-in.",
+            effortLevel: "Low",
+            score: 100
+          }
+        ],
+        chosenOption: {
+          title: "988 Suicide & Crisis Lifeline",
+          reason: "Please call or text 988. Professional care and support is available 24/7. You do not have to carry this alone."
+        },
+        reasoning: "Our local pre-flight safety check matched high-risk keywords in your SOS entry. We bypassed AI network systems to instantly guarantee crisis care and helpline information.",
+        escalation: {
+          shouldEscalate: true,
+          escalationReason: "Pre-flight safety logic flagged crisis/self-harm risk phrases."
+        }
+      });
+      return;
+    }
+
     setLoading(true);
     setLoadingMessage("Decision Engine processing safety metrics, history models, and behavioral plans...");
     setDecisionResult(null);
