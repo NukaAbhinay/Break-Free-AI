@@ -1,5 +1,14 @@
 import { describe, it, expect } from 'vitest';
 import { detectCrisis, CRISIS_KEYWORDS, EMERGENCY_RESOURCES } from '../lib/safety';
+import {
+  InterviewQuestionSchema,
+  BehaviourProfileSchema,
+  SOSDecisionSchema,
+  FutureSelfSchema,
+  TodayInsightSchema,
+  RecoveryPlanSchema,
+  AccountabilityMessageSchema
+} from '../lib/aiSchemas';
 
 describe('BreakFree AI - Core Safety & Behavioral Diagnostic Suite', () => {
   describe('Safety & Crisis Detection', () => {
@@ -139,6 +148,73 @@ describe('BreakFree AI - Core Safety & Behavioral Diagnostic Suite', () => {
       expect(result.errors).toContain("Occupation is required.");
       expect(result.errors).toContain("At least one habit must be selected.");
       expect(result.errors).toContain("Please define a concrete short-term goal.");
+    });
+  });
+
+  describe('Zod Schema Runtime Validation Suite', () => {
+    it('should validate InterviewQuestionSchema correctly', () => {
+      const valid = { question: "What is your trigger?" };
+      expect(InterviewQuestionSchema.parse(valid)).toEqual(valid);
+      expect(() => InterviewQuestionSchema.parse({})).toThrow();
+    });
+
+    it('should validate BehaviourProfileSchema correctly', () => {
+      const valid = {
+        primaryAddiction: "scrolling",
+        secondaryAddiction: "procrastination",
+        rootCause: "stress",
+        highRiskTime: "evening",
+        highRiskSituation: "boredom",
+        motivationSummary: "better health",
+        behaviourSummary: "triggers loop"
+      };
+      expect(BehaviourProfileSchema.parse(valid)).toEqual(valid);
+      expect(() => BehaviourProfileSchema.parse({ primaryAddiction: "scrolling" })).toThrow();
+    });
+
+    it('should validate SOSDecisionSchema correctly', () => {
+      const valid = {
+        options: [
+          { title: "Deep breaths", reason: "calming", effortLevel: "Low", score: 95 }
+        ],
+        chosenOption: { title: "Deep breaths", reason: "highly rated" },
+        reasoning: "best option",
+        escalation: { shouldEscalate: false, escalationReason: "stable" }
+      };
+      expect(SOSDecisionSchema.parse(valid)).toEqual(valid);
+      expect(() => SOSDecisionSchema.parse({})).toThrow();
+    });
+
+    it('should validate FutureSelfSchema correctly', () => {
+      const valid = { relapse: "regret", resist: "pride" };
+      expect(FutureSelfSchema.parse(valid)).toEqual(valid);
+      expect(() => FutureSelfSchema.parse({})).toThrow();
+    });
+
+    it('should validate TodayInsightSchema correctly', () => {
+      const valid = { insight: "doing great", adaptiveMove: "increaseDifficulty" as const, adaptiveReason: "ready" };
+      expect(TodayInsightSchema.parse(valid)).toEqual(valid);
+      
+      const invalidMove = { insight: "doing great", adaptiveMove: "invalidChoice", adaptiveReason: "ready" };
+      expect(() => TodayInsightSchema.parse(invalidMove)).toThrow();
+    });
+
+    it('should validate RecoveryPlanSchema correctly', () => {
+      const valid = {
+        todayGoal: "no scrolls",
+        replacementActivity: "read a book",
+        microHabit: "leave phone",
+        encouragement: "you got this",
+        tomorrowFocus: "stay focus"
+      };
+      expect(RecoveryPlanSchema.parse(valid)).toEqual(valid);
+      expect(() => RecoveryPlanSchema.parse({})).toThrow();
+    });
+
+    it('should validate AccountabilityMessageSchema correctly', () => {
+      const valid = { messageText: "hey help me out" };
+      expect(AccountabilityMessageSchema.parse(valid)).toEqual(valid);
+      expect(() => AccountabilityMessageSchema.parse({})).toThrow();
     });
   });
 });

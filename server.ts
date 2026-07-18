@@ -8,7 +8,17 @@ import path from "path";
 import dotenv from "dotenv";
 import { createServer as createViteServer } from "vite";
 import { GoogleGenAI, Type } from "@google/genai";
+import { ZodError } from "zod";
 import { detectCrisis } from "./src/lib/safety";
+import {
+  InterviewQuestionSchema,
+  BehaviourProfileSchema,
+  SOSDecisionSchema,
+  FutureSelfSchema,
+  TodayInsightSchema,
+  RecoveryPlanSchema,
+  AccountabilityMessageSchema
+} from "./src/lib/aiSchemas";
 
 dotenv.config();
 
@@ -120,10 +130,17 @@ app.post("/api/interview/next", async (req, res) => {
       }
     });
 
-    const data = JSON.parse(response.text || "{}");
+    const rawData = JSON.parse(response.text || "{}");
+    const data = InterviewQuestionSchema.parse(rawData);
     res.json(data);
   } catch (error: any) {
     console.error("Error generating next question:", error);
+    if (error instanceof ZodError) {
+      return res.status(502).json({
+        error: "Upstream AI model returned an invalid structured response.",
+        issues: error.issues
+      });
+    }
     res.status(500).json({ error: error.message || "Failed to generate next question." });
   }
 });
@@ -209,10 +226,17 @@ app.post("/api/interview/profile", async (req, res) => {
       }
     });
 
-    const data = JSON.parse(response.text || "{}");
+    const rawData = JSON.parse(response.text || "{}");
+    const data = BehaviourProfileSchema.parse(rawData);
     res.json(data);
   } catch (error: any) {
     console.error("Error generating behaviour profile:", error);
+    if (error instanceof ZodError) {
+      return res.status(502).json({
+        error: "Upstream AI model returned an invalid structured response.",
+        issues: error.issues
+      });
+    }
     res.status(500).json({ error: error.message || "Failed to generate behaviour profile." });
   }
 });
@@ -344,10 +368,17 @@ app.post("/api/sos/decide", async (req, res) => {
       }
     });
 
-    const data = JSON.parse(response.text || "{}");
+    const rawData = JSON.parse(response.text || "{}");
+    const data = SOSDecisionSchema.parse(rawData);
     res.json(data);
   } catch (error: any) {
     console.error("Error in SOS decision engine:", error);
+    if (error instanceof ZodError) {
+      return res.status(502).json({
+        error: "Upstream AI model returned an invalid structured response.",
+        issues: error.issues
+      });
+    }
     res.status(500).json({ error: error.message || "Failed to run decision engine." });
   }
 });
@@ -405,10 +436,17 @@ app.post("/api/future-self", async (req, res) => {
       }
     });
 
-    const data = JSON.parse(response.text || "{}");
+    const rawData = JSON.parse(response.text || "{}");
+    const data = FutureSelfSchema.parse(rawData);
     res.json(data);
   } catch (error: any) {
     console.error("Error generating future self scripts:", error);
+    if (error instanceof ZodError) {
+      return res.status(502).json({
+        error: "Upstream AI model returned an invalid structured response.",
+        issues: error.issues
+      });
+    }
     res.status(500).json({ error: error.message || "Failed to simulate future self." });
   }
 });
@@ -475,10 +513,17 @@ app.post("/api/today-insight", async (req, res) => {
       }
     });
 
-    const data = JSON.parse(response.text || "{}");
+    const rawData = JSON.parse(response.text || "{}");
+    const data = TodayInsightSchema.parse(rawData);
     res.json(data);
   } catch (error: any) {
     console.error("Error generating today's insight:", error);
+    if (error instanceof ZodError) {
+      return res.status(502).json({
+        error: "Upstream AI model returned an invalid structured response.",
+        issues: error.issues
+      });
+    }
     res.status(500).json({ error: error.message || "Failed to generate daily insight." });
   }
 });
@@ -546,10 +591,17 @@ app.post("/api/recovery-plan", async (req, res) => {
       }
     });
 
-    const data = JSON.parse(response.text || "{}");
+    const rawData = JSON.parse(response.text || "{}");
+    const data = RecoveryPlanSchema.parse(rawData);
     res.json(data);
   } catch (error: any) {
     console.error("Error generating recovery plan:", error);
+    if (error instanceof ZodError) {
+      return res.status(502).json({
+        error: "Upstream AI model returned an invalid structured response.",
+        issues: error.issues
+      });
+    }
     res.status(500).json({ error: error.message || "Failed to generate recovery plan." });
   }
 });
@@ -598,10 +650,17 @@ app.post("/api/accountability/message", async (req, res) => {
       }
     });
 
-    const data = JSON.parse(response.text || "{}");
+    const rawData = JSON.parse(response.text || "{}");
+    const data = AccountabilityMessageSchema.parse(rawData);
     res.json(data);
   } catch (error: any) {
     console.error("Error generating accountability message:", error);
+    if (error instanceof ZodError) {
+      return res.status(502).json({
+        error: "Upstream AI model returned an invalid structured response.",
+        issues: error.issues
+      });
+    }
     res.status(500).json({ error: error.message || "Failed to generate accountability message." });
   }
 });
